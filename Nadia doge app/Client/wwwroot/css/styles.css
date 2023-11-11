@@ -1,0 +1,37 @@
+﻿body {
+    background-color: LavenderBlush;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.center-container {
+    text-align: center;
+}
+
+.doggy-button {
+    background-color: Lavender;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.doggy-button:hover {
+    background-color: #d4d4f7;
+ }
+
+
+.dog-image {
+    max-width: 100%;
+    width: 500px;
+    height: auto;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.clicking-text {
+    position: absolute;
+    top: 202px;
+    left: 1010px;
+    font-family: 'Calibri Light', sans-serif;
+}

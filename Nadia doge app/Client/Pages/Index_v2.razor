@@ -1,0 +1,75 @@
+﻿@page "/"
+@inject HttpClient client
+@using System;
+@using System.Text.Json;
+@using System.Net.Http;
+@using System.Threading.Tasks;
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello!</h1>
+
+Today is the best day of your life!<br />
+
+Click to see a random picture of a dog<br />
+
+<input type="button" value="see doggy" @onclick="GetDogPic"/>
+
+
+
+@if (!string.IsNullOrEmpty(apiResponseFinal))
+{
+//    <p>API Response:</p>
+    <img src="@apiResponseFinal" alt="doge image" class="dog-image" />
+}
+
+
+
+@code{
+    private byte[] apiResponse;
+    private byte[] apiResponseImage;
+    private string apiResponseFinal;
+
+    private async Task GetDogPic()
+    {
+        using (var client = new HttpClient())
+        {
+            string apiUrl = "https://dog.ceo/api/breeds/image/random";
+
+            // Make an HTTP GET request to the API endpoint
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the JSON response into a C# object
+                YourApiResponseModel responseModel = JsonSerializer.Deserialize<YourApiResponseModel>(json);
+
+                if (responseModel != null)
+                {
+                    string imageUrl = responseModel.message; // Replace "imageUrl" with the actual property name in your JSON response
+
+                    Console.WriteLine("Image URL: " + imageUrl);
+                    apiResponseImage = await client.GetByteArrayAsync(imageUrl);
+                    apiResponseFinal = $"data:image/jpeg;base64,{Convert.ToBase64String(apiResponseImage)}";
+                }
+                else
+                {
+                    Console.WriteLine("Failed to deserialize JSON response.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("API request failed with status code: " + response.StatusCode);
+            }
+        }
+    }
+    public class YourApiResponseModel
+    {
+        public string message { get; set; } // Replace with the actual property name in your JSON response
+        public string status { get; set; }
+    }
+    
+
+}
